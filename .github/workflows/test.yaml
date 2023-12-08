@@ -11,6 +11,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
 
   lint:
@@ -33,7 +37,7 @@ jobs:
       - name: Run Catlin linting
         run: |
           set -Eeu
-          helm template task-oc . > task-oc.yaml
+          helm template task-openshift-client . > task-oc.yaml
           cat task-oc.yaml
           catlin validate task-oc.yaml || true
 
